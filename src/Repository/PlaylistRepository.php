@@ -34,7 +34,7 @@ class PlaylistRepository extends ServiceEntityRepository
      * @param type $ordre
      * @return Playlist[]
      */
-    public function findAllOrderByName($ordre): array
+    public function findAllOrderByName($ordre) : array
     {
         return $this->createQueryBuilder('p')
                 ->leftjoin('p.formations', 'f')
@@ -43,7 +43,7 @@ class PlaylistRepository extends ServiceEntityRepository
                 ->getQuery()
                 ->getResult();
     }
-	
+    
     /**
      * Enregistrements dont un champ contient une valeur
      * ou tous les enregistrements si la valeur est vide
