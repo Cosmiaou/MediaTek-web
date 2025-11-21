@@ -1,0 +1,45 @@
+
+    {{ form_start(formformation) }}
+        <div class="row">
+            <div class="col">
+                <!-- emplacement de la vidéo actuele -->
+                {% if formation.videoid %}
+                    Vidéo actuelle :
+                    <div style="width: 560px; height: 315px; float: none; clear: both; margin: 2px auto;">
+                      <embed
+                        src="https://www.youtube.com/embed/{{ formation.videoid }}" 
+                        wmode="transparent"
+                        type="video/mp4"
+                        width="100%" height="100%"
+                        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
+                        allowfullscreen
+                        title="YouTube video player"
+                      >
+                    </div>                                             
+                {% endif %}
+                <div>
+                    <br>Changer/Ajouter une URL :
+                    <br>{{ form_row(formformation.videoId) }}  
+                </div>
+            </div>
+            <div class="col">             
+                <div class="row">
+                    <div class="row-auto">
+                        {{ form_row(formformation.title) }}                                                  
+                    </div>
+                    <div class="row">
+                        {{ form_row(formformation.publishedAt) }}
+                    </div>
+                    <div class="row">
+                        {{ form_row(formformation.playlist) }}
+                    </div> 
+                    <div class="row">
+                        {{ form_row(formformation.categories) }}
+                    </div>
+                    <div class="row">
+                        {{ form_row(formformation.description) }}
+                    </div>
+                </div>
+            </div>
+        </div>           
+    {{ form_end(formformation) }}
