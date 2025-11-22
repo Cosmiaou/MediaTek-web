@@ -111,4 +111,15 @@ class FormationRepository extends ServiceEntityRepository
                 ->getQuery()
                 ->getResult();
     }
+    
+    public function findAllForOneCategory($idCategory) : array
+    {
+        return $this->createQueryBuilder('f')
+                ->join('f.categories', 'c')
+                ->where('c.id=:id')
+                ->setParameter('id', $idCategory)
+                ->orderBy('f.title', 'ASC')
+                ->getQuery()
+                ->getResult();
+    }
 }
