@@ -17,7 +17,7 @@
                   <a class="nav-link" href=" {{ path('admin.formations') }} ">Formations</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href=" path('admin.playlists') ">Playlists</a>
+                  <a class="nav-link" href=" {{ path('admin.playlists') }} ">Playlists</a>
                 </li>   
                 <li class="nav-item">
                   <a class="nav-link" href=" path('admin.categories') ">Catégories</a>
@@ -27,7 +27,12 @@
                 </li>  
               </ul>
             </div>
-        </nav>   
+        </nav>
+    {% for message in app.flashes('error') %}
+                    <div class="alert alert-error">
+                        {{ message }}
+                    </div>
+    {% endfor %}
 {% endblock %}
 {% block body %}{% endblock %}
 {% block javascripts %}{% endblock %}

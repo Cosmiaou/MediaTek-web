@@ -35,6 +35,9 @@ class PlaylistsController extends AbstractController
      */
     private $categorieRepository;
     
+    /**
+     * Chemin d'accès de la liste des playlists
+     */
     private const PAGEPLAYLISTS = "pages/playlists.html.twig";
     
     public function __construct(

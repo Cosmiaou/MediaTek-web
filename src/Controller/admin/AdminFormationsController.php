@@ -19,18 +19,17 @@ class AdminFormationsController extends AbstractController {
     
     /**
      *
-     * @var VisiteRepository
+     * @var formationRepository
      */
     private $formationRepository;
     
     private $categorieRepository;
     
-    private const ADMINFORMATION = "admin/admin.formations.html.twig";
-    
     /**
-     *
-     * @param VisiteRepository $repository
+     * Chemin d'accès de la liste des formations
      */
+    private const ADMINFORMATION = "admin/admin.formations.html.twig";
+
     public function __construct(FormationRepository $formationRepository, CategorieRepository $categorieRepository)
     {
         $this->formationRepository = $formationRepository;
@@ -72,7 +71,7 @@ class AdminFormationsController extends AbstractController {
         ]);
     }
     
-    #[Route('/admin/suppr/{id}', name: 'admin.formation.suppr')]
+    #[Route('/admin/formation/suppr/{id}', name: 'admin.formation.suppr')]
     public function suppr(int $id): Response {
         $formation = $this->formationRepository->find($id);
         $this->formationRepository->remove($formation);
@@ -90,7 +89,7 @@ class AdminFormationsController extends AbstractController {
             return $this->redirectToRoute('admin.formations');
         }
         
-        return $this->render("admin/admin.formation.edit.html.twig", [
+        return $this->render("admin/admin.formation.ajout.html.twig", [
             'formation' => $formation,
             'formformation' => $formFormation->createView()
         ]);

@@ -28,6 +28,9 @@ class FormationsController extends AbstractController
      */
     private $categorieRepository;
     
+    /**
+     * Chemin d'accès de la liste des formations
+     */
     private const PAGEFORMATION = "pages/formations.html.twig";
     
     public function __construct(FormationRepository $formationRepository, CategorieRepository $categorieRepository)

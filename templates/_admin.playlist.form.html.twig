@@ -1,0 +1,37 @@
+{{ form_start(formplaylist) }}
+        <div class="row">
+            <div class="col">             
+                <div class="row">
+                    <div class="row-auto">
+                        {{ form_row(formplaylist.name) }}                                                  
+                    </div>
+                    <div class="row">
+                        {{ form_row(formplaylist.description) }}
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <!-- emplacement de la liste des formations -->
+                {% if playlistformations %}
+                    Listes des {{ nbFormations }} formations :
+                    {% for formation in playlistformations %}
+                        <div class="row mt-1">
+                        <div class="col-md-auto">
+                            {% if formation.miniature %}
+                                <a href="{{ path('admin.formation.edit', {id:formation.id}) }}">
+                                    <img src="{{ formation.miniature }}" alt="Miniature de la playlist de formation">
+                                </a>
+                            {% endif %}  
+                        </div>
+                        <div class="col d-flex align-items-center">
+                            <a href="{{ path('admin.formation.edit', {id:formation.id}) }}" 
+                               class="link-secondary text-decoration-none">
+                                {{ formation.title }}
+                            </a>          
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            </div>
+        </div>           
+{{ form_end(formplaylist) }}
