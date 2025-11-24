@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * Description of AdminCategoriesController
@@ -71,10 +72,14 @@ class AdminCategoriesController extends AbstractController {
     #[Route('/admin/categorie/ajout', name: 'admin.categorie.ajout')]
     public function ajout(Request $request): Response {
         $nomCategorie = $request->get("nom");
-        $categorie = new Categorie();
-
-        $categorie->setName($nomCategorie);
-        $this->categorieRepository->add($categorie);
+        
+        if ($nomCategorie != null && strlen($nomCategorie) <= 50) {
+            $categorie = new Categorie();
+            $categorie->setName($nomCategorie);
+            $this->categorieRepository->add($categorie);
+        } else {
+            $this->addFlash('error', 'Erreur ! Un nom de moins de 50 caractères doit être indiqué pour la catégorie.');
+        }
         
         return $this->redirectToRoute('admin.categories');
     }
