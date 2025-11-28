@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Entité de Catégorie. Chaque Formation peut avoir une ou plusieurs catégories.
+ */
 #[ORM\Entity(repositoryClass: CategorieRepository::class)]
 class Categorie
 {

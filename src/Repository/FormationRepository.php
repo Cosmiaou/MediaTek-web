@@ -7,6 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * Repository des Formations
  * @extends ServiceEntityRepository<Formation>
  */
 class FormationRepository extends ServiceEntityRepository
@@ -112,6 +113,11 @@ class FormationRepository extends ServiceEntityRepository
                 ->getResult();
     }
     
+    /**
+     * Retourne la liste des formations d'une catégproe
+     * @param type $idCategory
+     * @return array
+     */
     public function findAllForOneCategory($idCategory) : array
     {
         return $this->createQueryBuilder('f')

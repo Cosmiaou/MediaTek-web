@@ -9,35 +9,50 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Length;
 
 /**
- * Description of AdminCategoriesController
+ * Controller pour la page admin/categories
  *
- * @author 
  */
-class AdminCategoriesController extends AbstractController {
-        /**
-     *
+class AdminCategoriesController extends AbstractController
+{
+    
+    /**
+     * Contient l'instance du repository de Formation
      * @var formationRepository
      */
     private $formationRepository;
     
+    /**
+     * Contient l'instance du repository de Categorie
+     * @var categoryRepository
+     */
     private $categorieRepository;
     
     /**
-     * Chemin d'accès de la liste des formations
+     * Chemin d'accès de la liste des Categories
      */
     private const ADMINCATEGORIES = "admin/admin.categories.html.twig";
 
+    /**
+     * Constructeur. Initialise les deux repository
+     * @param FormationRepository $formationRepository
+     * @param CategorieRepository $categorieRepository
+     */
     public function __construct(FormationRepository $formationRepository, CategorieRepository $categorieRepository)
     {
         $this->formationRepository = $formationRepository;
         $this->categorieRepository= $categorieRepository;
     }
     
+    /**
+     * Retourne /admin/categories, contenant la liste des formations ('formations')
+     * ainsi que la liste des catégories ('categories')
+     * @return Response
+     */
     #[Route('/admin/categories', name: 'admin.categories')]
-    public function index() : Response {
+    public function index() : Response
+    {
         $formations = $this->formationRepository->findAll();
         $categories = $this->categorieRepository->findAll();
         return $this->render(self::ADMINCATEGORIES, [
@@ -46,13 +61,15 @@ class AdminCategoriesController extends AbstractController {
         ]);
     }
     
-        /**
+     /**
      * Vérifie si la Catégorie demandée est vide. Si oui, la supprime. Si non, renvoi une erreur.
+     * Dans tous les cas, redirige vers admin/categories
      * @param int $id
      * @return Response
      */
     #[Route('/admin/categorie/suppr/{id}', name: 'admin.categorie.suppr')]
-    public function suppr(int $id): Response {
+    public function suppr(int $id): Response
+    {
         $formations = $this->formationRepository->findAllForOneCategory($id);
         
         if (count($formations) > 0) {
@@ -65,12 +82,15 @@ class AdminCategoriesController extends AbstractController {
     }
     
     /**
-     * Crée une nouvelle catégorie en fonction du nom indiqué par l'utilisateur
+     * Crée une nouvelle catégorie en fonction du nom indiqué par l'utilisateur.
+     * Dans tous les cas, renvoie vers admin/categories
+     * Si aucun nom n'est indiqué, renvoie un message Flash et refuse la création.
      * @param Request $request
      * @return Response
      */
     #[Route('/admin/categorie/ajout', name: 'admin.categorie.ajout')]
-    public function ajout(Request $request): Response {
+    public function ajout(Request $request): Response
+    {
         $nomCategorie = $request->get("nom");
         
         if ($nomCategorie != null && strlen($nomCategorie) <= 50) {

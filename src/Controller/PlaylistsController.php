@@ -10,36 +10,41 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Description of PlaylistsController
- *
+ * Controller pour la page des Playlists ('/playlists'), ainsi que pour les pages de consultation d'une Playlist
  * @author emds
  */
 class PlaylistsController extends AbstractController
 {
     
     /**
-     *
-     * @var PlaylistRepository
-     */
-    private $playlistRepository;
-    
-    /**
-     *
-     * @var FormationRepository
+     * Contient l'instance du repository de Formation
+     * @var formationRepository
      */
     private $formationRepository;
     
     /**
-     *
-     * @var CategorieRepository
+     * Contient l'instance du repository de Categorie
+     * @var categoryRepository
      */
     private $categorieRepository;
+    
+    /**
+     * Contient l'instance du repository de Playlist
+     * @var playlistRepository
+     */
+    private $playlistRepository;
     
     /**
      * Chemin d'accès de la liste des playlists
      */
     private const PAGEPLAYLISTS = "pages/playlists.html.twig";
     
+    /**
+     * Constructeur. Initialise les trois repository
+     * @param PlaylistRepository $playlistRepository
+     * @param CategorieRepository $categorieRepository
+     * @param FormationRepository $formationRespository
+     */
     public function __construct(
             PlaylistRepository $playlistRepository,
             CategorieRepository $categorieRepository,
@@ -51,7 +56,8 @@ class PlaylistsController extends AbstractController
     }
     
     /**
-     * @Route("/playlists", name="playlists")
+     * Retourne /playlists, contenant la liste des playlists ('playlists'),celle des catégories ('categories'),
+     * ainsi qu'un array contenant le nombre de Formations pour chaque playlist ('nbFormations')
      * @return Response
      */
     #[Route('/playlists', name: 'playlists')]
@@ -68,6 +74,16 @@ class PlaylistsController extends AbstractController
         ]);
     }
     
+    /**
+     * Retourne la liste des Playlists, mais triée en fonction des éléments sélectionnés.
+     * "champ" est vide par défaut. Sans paramètre, la fonction tri par ordre alphabétique du nom des Playlists
+     * Si on souhaite le tri en fonction du nombre de formations par playlist, il faut alors choisir insérer
+     * 'number' en paramètre en tant que $champ.
+     * Le code appelle ensuite la fonction PHP usort pour trier celles-ci selon l'ordre indiqué.
+     * @param type $ordre
+     * @param type $champ
+     * @return Response
+     */
     #[Route('/playlists/tri/{champ}/{ordre}', name: 'playlists.sort')]
     public function sort($ordre, $champ=""): Response
     {
@@ -93,7 +109,16 @@ class PlaylistsController extends AbstractController
             'nbFormations' => $nbFormations
         ]);
     }
-
+    
+    /**
+     * Retourne la liste des Playlists, mais filtrées en fonction de l'élément indiquée dans le form "recherche"
+     * "$table" est vide par défaut.
+     * En plus des éléments habituels, ajoute au rendu 'valeur' et 'table'
+     * @param type $champ
+     * @param Request $request
+     * @param type $table
+     * @return Response
+     */
     #[Route('/playlists/recherche/{champ}/{table}', name: 'playlists.findallcontain')]
     public function findAllContain($champ, Request $request, $table=""): Response
     {
@@ -111,6 +136,13 @@ class PlaylistsController extends AbstractController
         ]);
     }
 
+    /**
+     * Renvoie la page d'affichage de la Playlist dont l'id est passé en paramètre.
+     * Ajoute au rendu les formations de cette playlists, ainsi que toutes les catégories de ces formations, et le
+     * nombre total de formation. La page affiche une liste des formations de la playlists.
+     * @param type $id
+     * @return Response
+     */
     #[Route('/playlists/playlist/{id}', name: 'playlists.showone')]
     public function showOne($id): Response
     {
@@ -127,8 +159,7 @@ class PlaylistsController extends AbstractController
     
     
     /**
-     * Reçoit un array de liste de Playlist, et renvoi un array associant l'id d'une Playlist
-     * au nombre de Formation contenue
+     * Reçoit un array de Playlistd, et renvoi un array associant l'id d'une Playlist au nombre de Formation contenue
      * @param type $playlists
      * @return array
      */

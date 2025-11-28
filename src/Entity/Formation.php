@@ -9,6 +9,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Entité Formation. Peut faire partie d'une ou plusieurs catégories, et doit faire partie d'une playlist
+ */
 #[ORM\Entity(repositoryClass: FormationRepository::class)]
 class Formation
 {
