@@ -1,42 +1,16 @@
-name: Deploy Symfony to OVH
-
-on:
-  push:
-    branches: [ master ]
-
+on: push
+name: Deploy website on push
 jobs:
-  build:
+  web-deploy:
+    name: Deploy
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          extensions: mbstring, intl, pdo, xml
-          coverage: none
-
-      - name: Install dependencies (DEV)
-        run: |
-          composer install
-          php bin/console cache:clear --env=dev --no-warmup || true
-          php bin/console cache:warmup --env=dev || true
-
-      - name: Upload to OVH
+      - name: Get latest code
+        uses: actions/checkout@v2
+      - name: Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
           server: ftp.cluster100.hosting.ovh.net
+          server-dir: www/mediatekformation
           username: autogew
           password: ${{ secrets.ftp_password }}
-          server-dir: www/mediatekformation
-          local-dir: .
-          exclude: |
-            **/.git*
-            **/.github*
-            **/node_modules/*
-            **/var/cache/*
-            **/tests/*
-
