@@ -122,6 +122,10 @@ class AdminPlaylistsController extends AbstractController
     #[Route('/admin/playlists/recherche/{champ}/{table}', name: 'admin.playlists.findallcontain')]
     public function findAllContain($champ, Request $request, $table=""): Response
     {
+        if (!$this->isCsrfTokenValid('filtre_'.$champ, $request->get('_token'))) {
+           throw $this->createAccessDeniedException("Erreur de sécurité : veuillez réessayer"); 
+        }
+        
         $valeur = $request->get("recherche");
         $playlists = $this->playlistRepository->findByContainValue($champ, $valeur, $table);
         $categories = $this->categorieRepository->findAll();
@@ -143,7 +147,12 @@ class AdminPlaylistsController extends AbstractController
      * @return Response
      */
     #[Route('/admin/playlist/suppr/{id}', name: 'admin.playlist.suppr')]
-    public function suppr(int $id): Response {
+    public function suppr(Request $request, int $id): Response
+    {
+        if (!$this->isCsrfTokenValid('suppr'.$id, $request->get('_token'))) {
+           throw $this->createAccessDeniedException("Erreur de sécurité : veuillez réessayer"); 
+        }
+        
         $formations = $this->formationRepository->findAllForOnePlaylist($id);
         
         if (count($formations) > 0) {

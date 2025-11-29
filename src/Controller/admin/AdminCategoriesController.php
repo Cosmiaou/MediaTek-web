@@ -68,8 +68,12 @@ class AdminCategoriesController extends AbstractController
      * @return Response
      */
     #[Route('/admin/categorie/suppr/{id}', name: 'admin.categorie.suppr')]
-    public function suppr(int $id): Response
+    public function suppr(Request $request, int $id): Response
     {
+        if (!$this->isCsrfTokenValid('suppr'.$id, $request->get('_token'))) {
+           throw $this->createAccessDeniedException("Erreur de sécurité : veuillez réessayer"); 
+        }
+        
         $formations = $this->formationRepository->findAllForOneCategory($id);
         
         if (count($formations) > 0) {
@@ -91,6 +95,10 @@ class AdminCategoriesController extends AbstractController
     #[Route('/admin/categorie/ajout', name: 'admin.categorie.ajout')]
     public function ajout(Request $request): Response
     {
+        if (!$this->isCsrfTokenValid('filtre_ajout', $request->get('_token'))) {
+           throw $this->createAccessDeniedException("Erreur de sécurité : veuillez réessayer"); 
+        }
+        
         $nomCategorie = $request->get("nom");
         
         if ($nomCategorie != null && strlen($nomCategorie) <= 50) {

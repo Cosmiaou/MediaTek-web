@@ -4,7 +4,8 @@
     
     <form class="form-inline mt-1" method="POST" action="{{ path('admin.categorie.ajout') }}">
         <div class="form-group mr-1 mb-2">
-            <input type="text" class="sm" name="nom">    
+            <input type="text" class="sm" name="nom">
+            <input type="hidden" name="_token" value="{{ csrf_token('filtre_ajout') }}">
             <button type="submit" class="btn btn-primary mb-2 btn-sm">Ajouter</button>
         </div>
     </form>
@@ -28,7 +29,12 @@
                         </h5>
                     </td>
                     <td>
-                        <a href="{{ path('admin.categorie.suppr', {id:categorie.id}) }}" class="btn btn-danger" onclick="return confirm('Etes-vous sûr de vouloir supprimer {{ categorie.name }} ?')">Supprimer</a>
+                        <a
+                            href="{{ path('admin.categorie.suppr', {id: categorie.id, _token: csrf_token('suppr' ~ categorie.id)}) }}" 
+                            class="btn btn-danger" 
+                            onclick="return confirm('Etes-vous sûr de vouloir supprimer {{ categorie.name }} ?')">
+                            Supprimer
+                        </a>
                     </td>
                 </tr>
             {% endfor %}

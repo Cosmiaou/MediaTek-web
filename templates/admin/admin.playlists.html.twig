@@ -69,7 +69,12 @@
                         </td>
                         <td class="text-center">
                         <a href="{{  path('admin.playlist.edit', {id:playlists[k].id}) }}" class="btn btn-secondary">Editer</a>
-                        <a href="{{ path('admin.playlist.suppr', {id:playlists[k].id}) }}" class="btn btn-danger" onclick="return confirm('Etes-vous sûr de vouloir supprimer cette playlist ?')">Supprimer</a>
+                        <a
+                            href="{{ path('admin.playlist.suppr', {id:playlists[k].id, _token: csrf_token('suppr' ~ playlists[k].id)}) }}" 
+                            class="btn btn-danger" 
+                            onclick="return confirm('Etes-vous sûr de vouloir supprimer cette playlist ?')">
+                            Supprimer
+                        </a>
                         </td>
                     </tr>
                 {% endfor %}	

@@ -93,6 +93,10 @@ class AdminFormationsController extends AbstractController
     #[Route('admin/formations/recherche/{champ}/{table}', name: 'admin.formations.findallcontain')]
     public function findAllContain($champ, Request $request, $table=""): Response
     {
+        if (!$this->isCsrfTokenValid('filtre_'.$champ, $request->get('_token'))) {
+           throw $this->createAccessDeniedException("Erreur de sécurité : veuillez réessayer"); 
+        }
+        
         $valeur = $request->get("recherche");
         $formations = $this->formationRepository->findByContainValue($champ, $valeur, $table);
         $categories = $this->categorieRepository->findAll();
@@ -105,12 +109,17 @@ class AdminFormationsController extends AbstractController
     }
     
     /**
-     * Supprime l'élément indiqué en fonction de son id, puis recharge la page
+     * Contrôle le token et supprime l'élément indiqué en fonction de son id, puis recharge la page
      * @param int $id
      * @return Response
      */
     #[Route('/admin/formation/suppr/{id}', name: 'admin.formation.suppr')]
-    public function suppr(int $id): Response {
+    public function suppr(Request $request, int $id): Response
+    {
+        if (!$this->isCsrfTokenValid('suppr'.$id, $request->get('_token'))) {
+           throw $this->createAccessDeniedException("Erreur de sécurité : veuillez réessayer"); 
+        }
+        
         $formation = $this->formationRepository->find($id);
         $this->formationRepository->remove($formation);
         return $this->redirectToRoute('admin.formations');
@@ -123,7 +132,8 @@ class AdminFormationsController extends AbstractController
      * @return Response
      */
     #[Route('/admin/formation/edit/{id}', name: 'admin.formation.edit')]
-    public function edit(int $id, Request $request): Response {
+    public function edit(int $id, Request $request): Response
+    {
         $formation = $this->formationRepository->find($id);
         $formFormation = $this->createForm(FormationType::class, $formation);
         

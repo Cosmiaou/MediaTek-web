@@ -122,6 +122,10 @@ class PlaylistsController extends AbstractController
     #[Route('/playlists/recherche/{champ}/{table}', name: 'playlists.findallcontain')]
     public function findAllContain($champ, Request $request, $table=""): Response
     {
+        if (!$this->isCsrfTokenValid('filtre_'.$champ, $request->get('_token'))) {
+           throw $this->createAccessDeniedException("Erreur de sécurité : veuillez réessayer"); 
+        }
+        
         $valeur = $request->get("recherche");
         $playlists = $this->playlistRepository->findByContainValue($champ, $valeur, $table);
         $categories = $this->categorieRepository->findAll();
@@ -159,7 +163,7 @@ class PlaylistsController extends AbstractController
     
     
     /**
-     * Reçoit un array de Playlistd, et renvoi un array associant l'id d'une Playlist au nombre de Formation contenue
+     * Reçoit un array de Playlist, et renvoi un array associant l'id d'une Playlist au nombre de Formation contenue
      * @param type $playlists
      * @return array
      */

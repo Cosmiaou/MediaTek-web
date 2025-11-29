@@ -78,7 +78,12 @@
                     </td>
                     <td class="text-center">
                         <a href="{{  path('admin.formation.edit', {id:formation.id}) }}" class="btn btn-secondary">Editer</a>
-                        <a href="{{ path('admin.formation.suppr', {id:formation.id}) }}" class="btn btn-danger" onclick="return confirm('Etes-vous sûr de vouloir supprimer {{ formation.title }} ?')">Supprimer</a>
+                        <a
+                            href="{{ path('admin.formation.suppr', {id: formation.id, _token: csrf_token('suppr' ~ formation.id)}) }}" 
+                            class="btn btn-danger" 
+                            onclick="return confirm('Etes-vous sûr de vouloir supprimer {{ formation.title }} ?')">
+                            Supprimer
+                        </a>
                     </td>
                 </tr>
             {% endfor %}
