@@ -36,6 +36,7 @@
                                 </option>
                             {% endfor %}
                         </select>                    
+                        <input type="hidden" name="_token" value="{{ csrf_token('filtre_categorie') }}">
                     </form>            
                 </th>
                 <th class="text-center align-top" scope="col">
